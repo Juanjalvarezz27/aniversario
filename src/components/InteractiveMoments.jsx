@@ -1,263 +1,200 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const OurElements = () => {
-  const [clickedElements, setClickedElements] = useState([]);
-  const [activeAnimations, setActiveAnimations] = useState([]);
+const InteractiveMoments = () => {
+  const [loveCount, setLoveCount] = useState(0);
+  const [clickedHearts, setClickedHearts] = useState([]);
+  const [currentMessage, setCurrentMessage] = useState(0);
 
-  const handleElementClick = (index) => {
-    if (!clickedElements.includes(index)) {
-      setClickedElements(prev => [...prev, index]);
-      
-      // Agregar animación temporal
-      setActiveAnimations(prev => [...prev, index]);
-      setTimeout(() => {
-        setActiveAnimations(prev => prev.filter(i => i !== index));
-      }, 1000);
-    }
-  };
-
-  const loveFacts = [
-    { 
-      emoji: '🐶', 
-      fact: 'Nuestros perritos nos unen más cada día',
-      color: 'from-amber-500/20 to-orange-500/20',
-      effect: 'animate-puppy-bounce',
-      message: '¡Guau! ¡Te amo!'
-    },
-    { 
-      emoji: '🍕', 
-      fact: 'Las pizzas los viernes son nuestra tradición',
-      color: 'from-red-500/20 to-orange-500/20',
-      effect: 'animate-pizza-spin',
-      message: '¡Delicioso amor!'
-    },
-    { 
-      emoji: '🧸', 
-      fact: 'Cada peluche tiene una historia especial',
-      color: 'from-pink-500/20 to-rose-500/20',
-      effect: 'animate-teddy-hug',
-      message: '¡Abrázame fuerte!'
-    },
-    { 
-      emoji: '🍔', 
-      fact: 'Nuestras hamburguesas favoritas compartidas',
-      color: 'from-yellow-600/20 to-amber-700/20',
-      effect: 'animate-burger-bite',
-      message: '¡Qué hambre de amor!'
-    },
-    { 
-      emoji: '🤗', 
-      fact: 'Tus abrazos son mi lugar favorito',
-      color: 'from-blue-500/20 to-cyan-500/20',
-      effect: 'animate-hug-squeeze',
-      message: '¡Te aprieto fuerte!'
-    },
-    { 
-      emoji: '🐒', 
-      fact: 'Juntos somos como dos monitos juguetones',
-      color: 'from-brown-500/20 to-amber-700/20',
-      effect: 'animate-monkey-swing',
-      message: '¡Jugamos juntos!'
-    },
-    { 
-      emoji: '🍦', 
-      fact: 'Los helados los compartimos siempre',
-      color: 'from-cyan-500/20 to-blue-400/20',
-      effect: 'animate-ice-cream-melt',
-      message: '¡Dulce como tú!'
-    },
-    { 
-      emoji: '💝', 
-      fact: 'Cada detalle tuyo me hace feliz',
-      color: 'from-pink-600/20 to-rose-600/20',
-      effect: 'animate-heart-beat',
-      message: '¡Latidos de amor!'
-    }
+  const loveMessages = [
+    "Eres mi persona favorita en el mundo entero 💖",
+    "Tu sonrisa ilumina mis días más oscuros ✨",
+    "Cada momento a tu lado es un tesoro 🥰",
+    "Eres el mejor regalo que la vida me dio 🎁",
+    "Contigo todo tiene más color y magia 🌈",
+    "Mi corazón late al ritmo de tu nombre 💓",
+    "Eres el sueño que nunca quiero despertar 🌟",
+    "Te amo más que todas las estrellas del cielo 💕",
+    "Eres mi hogar, mi paz, mi todo 🏡",
+    "Tu amor es la fuerza que me impulsa cada día 💪",
+    "Espero pasar una vida contigo 🤝",
+    "Eres la razón de mi sonrisa  😊",
+    "Cada día a tu lado es una nueva aventura 🗺️",
+    "Tu amor es mi mayor felicidad",
+    "Eres perfecta mi monita 🌸",
+    "Mi vida mejoro cuando te conocí 🎉",
+    "Eres mi media yuca 🍊",
+    "Contigo el tiempo me vuela ⏰",
+    "Tu amor es mi combustible diario ⛽",
+    "Espero poder dejar de ser tu novio y ser tu esposo 💍"
   ];
 
+  const handleHeartClick = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    setClickedHearts(prev => [...prev, { id: Date.now(), x, y }]);
+    setLoveCount(prev => prev + 1);
+    setCurrentMessage(prev => (prev + 1) % loveMessages.length);
+    
+    // Remover corazones después de 2 segundos
+    setTimeout(() => {
+      setClickedHearts(prev => prev.filter(heart => heart.id !== Date.now()));
+    }, 2000);
+  };
+
+  // Rotación automática de mensajes cada 5 segundos
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentMessage(prev => (prev + 1) % loveMessages.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <section className="py-16 px-4 relative bg-linear-to-b from-purple-900/50 to-black/80">
-      <div className="max-w-6xl mx-auto">
-        {/* Encabezado */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-transparent bg-linear-to-r from-pink-400 to-purple-400 bg-clip-text">
-            Nuestros Símbolos de Amor
+    <section className="py-16 px-4 relative bg-linear-to-b from-purple-900 via-pink-900 to-black">
+      <div className="max-w-5xl mx-auto text-center">
+        {/* Encabezado mejorado */}
+        <div className="mb-12">
+          <h2 className="text-4xl md:text-6xl font-bold mb-4 text-transparent bg-linear-to-r from-red-400 via-pink-400 to-purple-400 bg-clip-text">
+            Nuestro Muro de Amor
           </h2>
-          <p className="text-lg text-pink-200/80 max-w-2xl mx-auto">
-            Cada elemento representa un momento especial que hemos compartido juntos
+          
+          <p className="text-lg md:text-xl text-pink-200 mb-4">
+            Toca el corazón y descubre mensajes especiales
           </p>
+          
+          <div className="text-sm text-purple-300 bg-black/40 px-4 py-2 rounded-full inline-block border border-purple-500/50">
+            💝 Cada clic es una razón más para amarte
+          </div>
         </div>
 
-        {/* Grid de elementos interactivos */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12">
-          {loveFacts.map((item, index) => {
-            const isClicked = clickedElements.includes(index);
-            const isAnimating = activeAnimations.includes(index);
+        {/* Área interactiva mejorada */}
+        <div 
+          className="relative bg-linear-to-br from-pink-900/80 via-purple-900/80 to-black rounded-3xl p-8 md:p-12 border-2 border-pink-400/50 min-h-96 flex items-center justify-center cursor-pointer shadow-2xl mb-10 overflow-hidden group hover:border-pink-400 transition-all duration-500"
+          onClick={handleHeartClick}
+        >
+          {/* Corazones clickeados - detrás del contenido */}
+          {clickedHearts.map(heart => (
+            <div
+              key={heart.id}
+              className="absolute text-3xl animate-heart-pop pointer-events-none z-10"
+              style={{ 
+                left: heart.x, 
+                top: heart.y,
+                animation: 'heartFloat 2s ease-out forwards'
+              }}
+            >
+              💖
+            </div>
+          ))}
+
+          {/* Contenido principal - encima de los corazones */}
+          <div className="text-center relative z-20">
+            {/* Emoji grande */}
+            <div className="text-7xl md:text-8xl mb-6 animate-pulse group-hover:scale-110 transition-transform duration-300">
+              💝
+            </div>
             
-            return (
+            {/* Mensaje principal con mejor estilo */}
+            <div className="bg-black/60 backdrop-blur-sm rounded-2xl p-6 border border-white/20 mx-auto max-w-2xl">
+              <p className="text-xl md:text-2xl text-white font-light leading-relaxed">
+                {loveMessages[currentMessage]}
+              </p>
+              <div className="text-sm text-pink-300 mt-3">
+                Mensaje {currentMessage + 1} de {loveMessages.length}
+              </div>
+            </div>
+
+            {/* Instrucción */}
+            <div className="text-pink-300/80 text-sm mt-6 bg-black/30 px-4 py-2 rounded-full inline-block border border-pink-400/30">
+              👆 Toca aquí para más mensajes de amor
+            </div>
+          </div>
+
+          {/* Efectos de fondo */}
+          <div className="absolute inset-0 pointer-events-none opacity-40">
+            {[...Array(15)].map((_, i) => (
               <div
-                key={index}
-                className={`
-                  relative bg-linear-to-br ${item.color} rounded-2xl p-4 md:p-6 text-center cursor-pointer 
-                  transform transition-all duration-300 border-2 border-white/20 backdrop-blur-sm
-                  ${isClicked ? 'scale-95 border-pink-400/60' : 'hover:scale-105 hover:border-pink-300/40'}
-                  ${isAnimating ? item.effect : ''}
-                `}
-                onClick={() => handleElementClick(index)}
-              >
-                {/* Emoji con efecto especial */}
-                <div className={`text-4xl md:text-5xl mb-3 md:mb-4 transition-transform duration-300 ${
-                  isAnimating ? 'scale-110' : ''
-                }`}>
-                  {item.emoji}
-                </div>
-                
-                {/* Texto del hecho */}
-                <p className="text-white text-xs md:text-sm leading-tight font-medium">
-                  {item.fact}
-                </p>
-                
-                {/* Efecto de brillo al hacer hover */}
-                <div className="absolute inset-0 rounded-2xl bg-linear-to-br from-white/0 to-white/0 hover:from-white/5 hover:to-white/10 transition-all duration-300 pointer-events-none" />
-                
-                {/* Indicador de selección */}
-                {isClicked && (
-                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center">
-                    <span className="text-white text-xs">✓</span>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Área de mensajes interactivos */}
-        <div className="text-center mb-8">
-          <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-pink-500/30 max-w-2xl mx-auto">
-            <h3 className="text-xl md:text-2xl text-pink-300 mb-4">
-              {clickedElements.length === 0 
-                ? "💝 Toca los símbolos para descubrir mensajes especiales" 
-                : `✨ Has descubierto ${clickedElements.length} de ${loveFacts.length} símbolos`
-              }
-            </h3>
-            
-            {/* Mostrar mensajes de elementos clickeados */}
-            <div className="flex flex-wrap justify-center gap-2 mt-4">
-              {clickedElements.map((index) => (
-                <div
-                  key={index}
-                  className="bg-pink-500/20 text-pink-200 px-3 py-2 rounded-full text-sm border border-pink-500/30 animate-fade-in"
-                >
-                  {loveFacts[index].message}
-                </div>
-              ))}
-            </div>
+                key={i}
+                className="absolute w-1 h-1 md:w-2 md:h-2 bg-linear-to-r from-pink-400 to-purple-400 rounded-full animate-pulse"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 4}s`,
+                  animationDuration: `${3 + Math.random() * 2}s`
+                }}
+              />
+            ))}
           </div>
         </div>
 
-        {/* Progreso */}
-        {clickedElements.length > 0 && (
-          <div className="text-center">
-            <div className="inline-block bg-black/50 backdrop-blur-sm px-6 py-3 rounded-full border border-purple-500/50">
-              <div className="text-pink-300 text-sm">
-                Progreso: {clickedElements.length}/{loveFacts.length} símbolos descubiertos
-              </div>
-              <div className="w-48 h-2 bg-gray-700 rounded-full mt-2 mx-auto overflow-hidden">
-                <div 
-                  className="h-full bg-linear-to-r from-pink-500 to-purple-500 transition-all duration-500 rounded-full"
-                  style={{ width: `${(clickedElements.length / loveFacts.length) * 100}%` }}
-                />
-              </div>
-            </div>
+        {/* Estadísticas mejoradas */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-12">
+          <div className="bg-linear-to-br from-pink-600/20 to-pink-900/30 rounded-2xl p-6 border border-pink-500/30 backdrop-blur-sm">
+            <div className="text-4xl text-pink-400 font-bold mb-2">{loveCount}</div>
+            <div className="text-pink-200 text-lg">Corazones Enviados</div>
+            <div className="text-pink-300/70 text-sm mt-1">Tu amor en números</div>
           </div>
-        )}
+          
+          <div className="bg-linear-to-br from-purple-600/20 to-purple-900/30 rounded-2xl p-6 border border-purple-500/30 backdrop-blur-sm">
+            <div className="text-4xl text-purple-400 font-bold mb-2">365</div>
+            <div className="text-purple-200 text-lg">Días Juntos</div>
+            <div className="text-purple-300/70 text-sm mt-1">Un año de felicidad</div>
+          </div>
+          
+          <div className="bg-linear-to-br from-red-600/20 to-red-900/30 rounded-2xl p-6 border border-red-500/30 backdrop-blur-sm">
+            <div className="text-4xl text-red-400 font-bold mb-2">∞</div>
+            <div className="text-red-200 text-lg">Amor Eterno</div>
+            <div className="text-red-300/70 text-sm mt-1">Para siempre juntos</div>
+          </div>
+        </div>
 
-        {/* Elementos decorativos flotantes */}
-        <div className="absolute top-8 left-6 text-3xl animate-float-1">🌟</div>
-        <div className="absolute bottom-12 right-8 text-4xl animate-float-2">✨</div>
-        <div className="absolute top-1/2 left-10 text-2xl animate-float-3">🎀</div>
-        <div className="absolute top-20 right-16 text-3xl animate-float-4">💫</div>
-        <div className="absolute bottom-8 left-20 text-2xl animate-bounce delay-300">🍔</div>
+        {/* Elementos decorativos mejorados */}
+        <div className="flex flex-wrap justify-center gap-4 md:gap-8 text-3xl md:text-4xl">
+          {['🐶', '🐱', '🍕', '🍪', '🧸', '🌟', '🎮', '🎵', '📚', '☕'].map((emoji, index) => (
+            <span 
+              key={emoji}
+              className="animate-bounce hover:scale-125 transition-transform cursor-default"
+              style={{ animationDelay: `${index * 0.2}s` }}
+            >
+              {emoji}
+            </span>
+          ))}
+        </div>
+
+        {/* Mensaje final */}
+        <div className="mt-10 text-center">
+          <div className="text-pink-300/80 text-sm bg-black/40 px-6 py-3 rounded-full inline-block border border-pink-400/30">
+            💞 El amor se multiplica con cada recuerdo compartido
+          </div>
+        </div>
       </div>
 
-      {/* Estilos de animación personalizados */}
+      {/* Estilos de animación */}
       <style jsx>{`
-        @keyframes float-1 {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-15px) rotate(5deg); }
-        }
-        @keyframes float-2 {
-          0%, 100% { transform: translateY(-5px) rotate(-3deg); }
-          50% { transform: translateY(-20px) rotate(3deg); }
-        }
-        @keyframes float-3 {
-          0%, 100% { transform: translateY(2px) rotate(2deg); }
-          50% { transform: translateY(-12px) rotate(-2deg); }
-        }
-        @keyframes float-4 {
-          0%, 100% { transform: translateY(-3px) rotate(-1deg); }
-          50% { transform: translateY(-18px) rotate(1deg); }
-        }
-        @keyframes fade-in {
-          0% { opacity: 0; transform: scale(0.8); }
-          100% { opacity: 1; transform: scale(1); }
+        @keyframes heartFloat {
+          0% {
+            transform: scale(0) translateY(0);
+            opacity: 1;
+          }
+          50% {
+            transform: scale(1) translateY(-20px);
+            opacity: 0.8;
+          }
+          100% {
+            transform: scale(0.5) translateY(-40px);
+            opacity: 0;
+          }
         }
         
-        /* Animaciones específicas para cada elemento */
-        @keyframes puppy-bounce {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.1) translateY(-5px); }
+        .animate-heart-pop {
+          animation: heartFloat 2s ease-out forwards;
         }
-        @keyframes pizza-spin {
-          0% { transform: rotate(0deg) scale(1); }
-          50% { transform: rotate(180deg) scale(1.05); }
-          100% { transform: rotate(360deg) scale(1); }
-        }
-        @keyframes teddy-hug {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.2); }
-        }
-        @keyframes burger-bite {
-          0%, 100% { transform: scale(1) rotate(0deg); }
-          25% { transform: scale(0.9) rotate(-5deg); }
-          50% { transform: scale(1.1) rotate(0deg); }
-          75% { transform: scale(0.95) rotate(5deg); }
-        }
-        @keyframes hug-squeeze {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(0.9); }
-        }
-        @keyframes monkey-swing {
-          0%, 100% { transform: rotate(0deg); }
-          25% { transform: rotate(-15deg); }
-          75% { transform: rotate(15deg); }
-        }
-        @keyframes ice-cream-melt {
-          0%, 100% { transform: scaleY(1); }
-          50% { transform: scaleY(0.8); }
-        }
-        @keyframes heart-beat {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.15); }
-        }
-        
-        .animate-float-1 { animation: float-1 4s ease-in-out infinite; }
-        .animate-float-2 { animation: float-2 5s ease-in-out infinite; }
-        .animate-float-3 { animation: float-3 6s ease-in-out infinite; }
-        .animate-float-4 { animation: float-4 7s ease-in-out infinite; }
-        .animate-fade-in { animation: fade-in 0.5s ease-out; }
-        
-        .animate-puppy-bounce { animation: puppy-bounce 0.5s ease-in-out; }
-        .animate-pizza-spin { animation: pizza-spin 1s ease-in-out; }
-        .animate-teddy-hug { animation: teddy-hug 0.6s ease-in-out; }
-        .animate-burger-bite { animation: burger-bite 0.8s ease-in-out; }
-        .animate-hug-squeeze { animation: hug-squeeze 0.7s ease-in-out; }
-        .animate-monkey-swing { animation: monkey-swing 0.9s ease-in-out; }
-        .animate-ice-cream-melt { animation: ice-cream-melt 0.6s ease-in-out; }
-        .animate-heart-beat { animation: heart-beat 0.5s ease-in-out; }
       `}</style>
     </section>
   );
 };
 
-export default OurElements;
+export default InteractiveMoments;
