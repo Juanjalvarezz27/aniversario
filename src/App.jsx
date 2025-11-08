@@ -43,7 +43,6 @@ function App() {
         <MemoriesCarousel />
         <OurElements />
         <LoveGallery />
-        <InteractiveMoments />
         <FinalDeclaration />
       </div>
     </div>
